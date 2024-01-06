@@ -1,0 +1,11 @@
+{
+    "flood_ui": {
+        "cat": "gameplay",
+        "order": 0,
+        "ctx": "tlua",
+        "onDown": "if not extensions.flood then log('E', 'onDown', 'Could not find flood mod extension, unable to open UI') else extensions.flood.showUI[0] = not extensions.flood.showUI[0] end",
+        "isBasic": true,
+        "title": "Flood UI",
+        "desc": "Toggles the Flood UI"
+    }
+}
