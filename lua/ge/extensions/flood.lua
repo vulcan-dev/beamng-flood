@@ -26,8 +26,8 @@ local inMission = false
 local initialWaterPosition = nil
 local hiddenWater = {} -- This is used for storing the water sources below the ocean leven (when hiding overlapped water sources).
 
-local defaultWindowHeight = 410
-local expandedWindowHeight = 460 -- When the rain category is open
+local defaultWindowHeight = 430
+local expandedWindowHeight = 480 -- When the rain category is open
 local windowMinHeight = defaultWindowHeight
 local shouldResetWindowHeight = false
 
@@ -42,6 +42,7 @@ local version = "1.4.0"
 local changes = [[
     New Features/Changes:
       - Added this wonderful help menu
+      - Added "Stop when submerged option", this stops the flooding once your vehicle has been submerged by the water
       - Changed "Enable" toggle to a Start/Stop Button
       - Reset button now disables flooding
       - When water reaches the heightLimit, it will now stop flooding
@@ -546,6 +547,7 @@ local function renderUI()
         local ptrLimitEnabled = imgui.BoolPtr(M.presetData.limitEnabled)
         local ptrFloodWithRain = imgui.BoolPtr(M.presetData.floodWithRain)
         local ptrHideCoveredWater = imgui.BoolPtr(M.presetData.hideCoveredWater)
+        local ptrStopWhenSubmerged = imgui.BoolPtr(M.presetData.stopWhenSubmerged)
         local ptrRainMultiplier = imgui.FloatPtr(M.presetData.rainMultiplier)
         local ptrSpeed = imgui.FloatPtr(M.presetData.speed)
         local ptrLimit = imgui.FloatPtr(M.presetData.heightLimit)
@@ -575,6 +577,10 @@ local function renderUI()
         end
         imgui.SameLine()
         tooltip("This option will hide water sources that are below the ocean, this prevents weird visuals when going under water.")
+
+        if imgui.Checkbox("Stop when submerged", ptrStopWhenSubmerged) then
+            M.presetData.stopWhenSubmerged = ptrStopWhenSubmerged[0]
+        end
 
         if imgui.Checkbox("Rain Enabled", ptrRainEnabled) then
             if not rainObj then createRain() end
@@ -746,7 +752,7 @@ local function onUpdate(dt)
     if M.presetData.gradualReturn then
         local initialZ = initialWaterPosition:getColumn(3).z
         local curZ = ptrWaterLevel[0]
-        local precision = 0.05 -- I wouldn't recommend lowering this
+        local precision = 0.05 -- I wouldn't recommend lowering this, even though this can still have slight issues (when speed is 50)
     
         if math.abs(initialZ - curZ) > precision then
             local newZ = curZ + (initialZ < curZ and -1 or 1) * M.presetData.speed * dt
@@ -774,6 +780,19 @@ local function onUpdate(dt)
     
         ptrWaterLevel[0] = oceanHeight
         setWaterLevel(oceanHeight)
+    end
+
+    if M.presetData.stopWhenSubmerged then
+        local veh = be:getPlayerVehicle(0)
+        if not veh then return end
+
+        local boundingBox = veh:getSpawnWorldOOBB()
+        local halfExtentsZ = boundingBox:getHalfExtents().z
+        local height = halfExtentsZ * 2
+        local pos = veh:getPosition()
+        if oceanHeight >= pos.z + height then
+            M.presetData.enabled = false
+        end
     end
 end
 

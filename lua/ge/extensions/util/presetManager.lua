@@ -1,18 +1,19 @@
 local M = {}
 
 M.defaults = {
-    ["enabled"]           = false,
-    ["speed"]             = 0.001,
-    ["heightLimit"]       = 0,
-    ["limitEnabled"]      = false,
-    ["decrease"]          = false,
-    ["gradualReturn"]     = false,
-    ["hideCoveredWater"]  = true,
-    ["floodWithRain"]     = false,
-    ["rainMultiplier"]    = 0.01,
-    ["rainEnabled"]       = false,
-    ["rainVolume"]        = 0,
-    ["rainAmount"]        = 0,
+    ["enabled"]              = false,
+    ["speed"]                = 0.001,
+    ["heightLimit"]          = 0,
+    ["limitEnabled"]         = false,
+    ["decrease"]             = false,
+    ["gradualReturn"]        = false,
+    ["hideCoveredWater"]     = true,
+    ["stopWhenSubmerged"]    = false,
+    ["floodWithRain"]        = false,
+    ["rainMultiplier"]       = 0.01,
+    ["rainEnabled"]          = false,
+    ["rainVolume"]           = 0,
+    ["rainAmount"]           = 0,
 }
 
 local filename = "/settings/floodPresets.json"
