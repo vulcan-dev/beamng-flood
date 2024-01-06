@@ -1,8 +1,6 @@
 local M = {}
 local imgui = ui_imgui
 
--- TODO: Stop when submerged
-
 local presetManager = require("util.presetManager")
 
 -- Public Variables
@@ -299,11 +297,7 @@ local function hideCoveredWater()
     end
 end
 
-local function setup()
-    if imgui.GetWindowHeight() == windowMinHeight then -- If we have manually changed the window size, don't set it
-        shouldResetWindowHeight = true
-    end
-
+local function resetImportant()
     windowMinHeight = defaultWindowHeight
     initialWaterPosition = nil
 
@@ -799,14 +793,14 @@ end
 local function onExtensionUnloaded()
     resetRain()
     reset()
-    setup()
+    resetImportant()
 end
 
 local function onClientStartMission()
     local mission = getMissionFilename()
     if mission == "" then inMission = false return end
 
-    setup()
+    resetImportant()
 
     for _, water in pairs(waterSources) do
         water.isRenderEnabled = true
@@ -848,7 +842,7 @@ end
 
 local function onClientEndMission()
     inMission = false
-    setup()
+    resetImportant()
 end
 
 -- Public Interface
