@@ -58,7 +58,7 @@ local changes = [[
 
     Fixes:
       - I'm fairly certain I've fixed the "attempt to index global 'flood'" for some users, let's pray
-      - Decrease to initial will now decrease the water level to the precise starting position
+      - Gradual Return will now decrease the water level to the precise starting position
       - Fixed flood with rain not functioning correctly (it didn't work when `Speed` was 0)
       - Fixed mission file changes, we now use `onClientStartMission` and `onClientEndMission` instead of checking in `onUpdate`
       - Time in environment options is now synced with the in-game time. I have also made it match the slider (time from 12 -> 0 -> 12) instead of 0-24
