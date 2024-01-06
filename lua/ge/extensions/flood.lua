@@ -5,21 +5,6 @@ local imgui = ui_imgui
 
 local presetManager = require("util.presetManager")
 
-local defaults = {
-    ["enabled"]           = false,
-    ["speed"]             = 0.001,
-    ["heightLimit"]       = 0,
-    ["limitEnabled"]      = false,
-    ["decrease"]          = false,
-    ["gradualReturn"]     = false,
-    ["hideCoveredWater"]  = true,
-    ["floodWithRain"]     = false,
-    ["rainMultiplier"]    = 0.01,
-    ["rainEnabled"]       = false,
-    ["rainVolume"]        = 0,
-    ["rainAmount"]        = 0,
-}
-
 -- Public Variables
 ------------------------------------------------------------
 M.presetData = {}
@@ -465,7 +450,6 @@ local function renderUI()
                             goto continue
                         end
 
-                        -- TODO: Validate preset
                         M.presetData = shallowcopy(preset.data)
                         activePreset = preset.name
 
@@ -486,7 +470,7 @@ local function renderUI()
                     if not isActive then imgui.BeginDisabled() end
                     imgui.SameLine()
                     if imgui.Button("R##" .. preset.name) then
-                        M.presetData = shallowcopy(defaults)
+                        M.presetData = shallowcopy(presetManager.defaults)
 
                         if not M.presetData.rainEnabled then
                             if windowHeight == expandedWindowHeight then
@@ -637,9 +621,9 @@ local function renderUI()
 
         imgui.Separator()
 
-        M.presetData.speed          = slider("Speed", ptrSpeed, 0, M.maxSpeed, "%.6f", defaults.speed)
-        M.presetData.rainMultiplier = slider("Rain Multiplier", ptrRainMultiplier, 0, 0.5, "%.6f", defaults.rainMultiplier)
-        M.presetData.heightLimit    = slider("Height Limit", ptrLimit, -500, 500, "%.6f", defaults.heightLimit)
+        M.presetData.speed          = slider("Speed", ptrSpeed, 0, M.maxSpeed, "%.6f", presetManager.defaults.speed)
+        M.presetData.rainMultiplier = slider("Rain Multiplier", ptrRainMultiplier, 0, 0.5, "%.6f", presetManager.defaults.rainMultiplier)
+        M.presetData.heightLimit    = slider("Height Limit", ptrLimit, -500, 500, "%.6f", presetManager.defaults.heightLimit)
 
         -- Water Level
         if imgui.SliderFloat("Water Level", ptrWaterLevel, -500, 500, "%.6f") then
@@ -809,7 +793,7 @@ local function onClientStartMission()
         water.isRenderEnabled = true
     end
 
-    M.presetData = shallowcopy(defaults)
+    M.presetData = shallowcopy(presetManager.defaults)
     activePreset = defaultPresetName
 
     ffi.copy(presetNameBuffer, defaultPresetName)
@@ -829,10 +813,10 @@ local function onExtensionLoaded()
     onClientStartMission() -- Just because it sets stuff up for us
 
     if not presetManager.loadPresets() then
-        presetManager.savePreset(defaultPresetName, defaults)
+        presetManager.savePreset(defaultPresetName, presetManager.defaults)
     end
 
-    M.presetData = shallowcopy(defaults)
+    M.presetData = shallowcopy(presetManager.defaults)
     activePreset = defaultPresetName
 
     ffi.copy(presetNameBuffer, defaultPresetName)
