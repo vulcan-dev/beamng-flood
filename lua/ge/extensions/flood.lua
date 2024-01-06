@@ -838,6 +838,11 @@ local function onExtensionLoaded()
     M.presetData = shallowcopy(presetManager.defaults)
     activePreset = defaultPresetName
 
+    if not M.presetData.rainEnabled then
+        windowMinHeight = defaultWindowHeight
+        shouldResetWindowHeight = true
+    end
+
     ffi.copy(presetNameBuffer, defaultPresetName)
 end
 
