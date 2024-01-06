@@ -459,8 +459,6 @@ local function renderUI()
                         ffi.copy(presetNameBuffer, activePreset)
                         shouldUpdateRainAndWindow = true
 
-                        shouldUpdateRainAndWindow = true
-
                         log('I', 'presetManager', 'Loaded preset: ' .. preset.name)
                         ::continue::
                     end
