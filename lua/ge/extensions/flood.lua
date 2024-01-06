@@ -349,6 +349,8 @@ local function renderUI()
     floodui.pushColor(imgui.Col_SliderGrab,             imgui.ImVec4(0.27, 0.36, 0.46, 1.0))
     floodui.pushColor(imgui.Col_SliderGrabActive,       imgui.ImVec4(0.85, 0.75, 0.55, 1.0))
 
+    floodui.pushColor(imgui.Col_TextSelectedBg,         imgui.ImVec4(0.71, 0.56, 0.58, 1.0))
+
     windowMinHeight = M.presetData.rainEnabled and expandedWindowHeight or defaultWindowHeight
 
     -- This gets set when "Rain Enabled" is disabled. If you don't manually resize, it will update to fit all the contents. Otherwise, it will keep the size you set
